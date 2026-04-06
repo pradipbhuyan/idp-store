@@ -3,7 +3,7 @@
     {
       "id": "manual-idp",
       "name": "Manual IDP",
-      "repo": "pradipbhuyan/manual-idp",
+      "repo": "pradipbhuyan/idp-app",
       "branch": "main",
       "entry_file": "IDP.py",
       "description": "Non Agentic version of the Intelligent Document Processor with guided review flow.",
