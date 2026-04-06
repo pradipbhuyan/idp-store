@@ -1,6 +1,17 @@
 {
   "apps": [
     {
+      "id": "manual-idp",
+      "name": "Manual IDP",
+      "repo": "pradipbhuyan/manual-idp",
+      "branch": "main",
+      "entry_file": "IDP.py",
+      "description": "Non Agentic version of the Intelligent Document Processor with guided review flow.",
+      "tags": ["Manual", "Legacy", "Stable"],
+      "logo": "",
+      "streamlit_url": "https://idp-app-v1.streamlit.app"
+    },
+    {
       "id": "idp-v1",
       "name": "IDP v1",
       "repo": "pradipbhuyan/idpagent",
