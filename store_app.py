@@ -5,14 +5,26 @@ import streamlit as st
 
 st.set_page_config(page_title="IDP Store", layout="wide")
 
-CONFIG_PATH = Path(__file__).parent / "apps_config.json"
+BASE_DIR = Path(__file__).parent
+CONFIG_PATH = BASE_DIR / "apps_config.json"
+LOGO_PATH = BASE_DIR / "assets" / "idp-logo.png"
 
 
 def load_config():
     if not CONFIG_PATH.exists():
+        st.error(f"Missing config file: {CONFIG_PATH}")
         return {"apps": []}
-    with open(CONFIG_PATH, "r", encoding="utf-8") as f:
-        return json.load(f)
+
+    try:
+        with open(CONFIG_PATH, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except json.JSONDecodeError as e:
+        st.error(f"apps_config.json is invalid JSON. Line {e.lineno}, column {e.colno}: {e.msg}")
+        st.code(CONFIG_PATH.read_text(encoding="utf-8"))
+        return {"apps": []}
+    except Exception as e:
+        st.error(f"Failed to load config: {str(e)}")
+        return {"apps": []}
 
 
 def get_chip_color(label: str) -> str:
@@ -23,7 +35,7 @@ def get_chip_color(label: str) -> str:
         return "#f9ab00"
     if label in ["legacy", "manual"]:
         return "#5f6368"
-    if label in ["sprint 2", "sprint 3", "sprint 4", "sprint 5"]:
+    if label.startswith("sprint"):
         return "#1a73e8"
     return "#6c757d"
 
@@ -48,66 +60,19 @@ def render_chip(text: str):
     )
 
 
-def render_app_card(app: dict):
-    name = app.get("name", "Unknown App")
-    description = app.get("description", "No description provided.")
-    repo = app.get("repo", "-")
-    branch = app.get("branch", "-")
-    entry_file = app.get("entry_file", "-")
-    streamlit_url = app.get("streamlit_url", "")
-    logo = app.get("logo", "")
+def get_app_tags(app: dict):
     tags = app.get("tags", [])
-
-    github_url = f"https://github.com/{repo}" if repo and repo != "-" else ""
-
-    with st.container(border=True):
-        top1, top2 = st.columns([1, 5], gap="small")
-
-        with top1:
-            if logo:
-                st.image(logo, width=64)
-            else:
-                st.markdown(
-                    """
-                    <div style="
-                        width:64px;
-                        height:64px;
-                        border-radius:16px;
-                        background:#111827;
-                        display:flex;
-                        align-items:center;
-                        justify-content:center;
-                        font-size:28px;
-                    ">📄</div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-
-        with top2:
-            st.markdown(f"### {name}")
-            if tags:
-                for tag in tags:
-                    render_chip(tag)
-
-            st.write(description)
-            st.caption(f"Repo: {repo}")
-            st.caption(f"Branch: {branch} | Entry: {entry_file}")
-
-        b1, b2 = st.columns(2)
-        with b1:
-            if streamlit_url:
-                st.link_button("Open App", streamlit_url, use_container_width=True)
-            else:
-                st.button("Open App", disabled=True, use_container_width=True, key=f"open_{name}")
-
-        with b2:
-            if github_url:
-                st.link_button("Open GitHub Repo", github_url, use_container_width=True)
-            else:
-                st.button("Open GitHub Repo", disabled=True, use_container_width=True, key=f"repo_{name}")
+    if not tags and app.get("tag"):
+        tags = [app.get("tag")]
+    return tags
 
 
-def app_matches(app: dict, q: str) -> bool:
+def has_tag(app: dict, tag_name: str) -> bool:
+    tags = [t.lower() for t in get_app_tags(app)]
+    return tag_name.lower() in tags
+
+
+def app_matches_search(app: dict, q: str) -> bool:
     q = q.strip().lower()
     if not q:
         return True
@@ -118,54 +83,176 @@ def app_matches(app: dict, q: str) -> bool:
         app.get("repo", ""),
         app.get("branch", ""),
         app.get("entry_file", ""),
-        " ".join(app.get("tags", [])),
+        " ".join(get_app_tags(app)),
     ]).lower()
 
     return q in blob
 
 
-def main():
-    config = load_config()
-    apps = config.get("apps", [])
+def app_matches_filter(app: dict, active_filter: str) -> bool:
+    if active_filter == "All":
+        return True
 
+    tags = [t.lower() for t in get_app_tags(app)]
+
+    if active_filter == "Stable":
+        return "stable" in tags
+
+    if active_filter == "Latest":
+        return "latest" in tags
+
+    if active_filter == "Manual":
+        return "manual" in tags
+
+    if active_filter == "Sprint":
+        return any(t.startswith("sprint") for t in tags)
+
+    return True
+
+
+def render_header():
+    c1, c2 = st.columns([1, 5], gap="medium")
+
+    with c1:
+        if LOGO_PATH.exists():
+            st.image(str(LOGO_PATH), width=120)
+
+    with c2:
+        st.title("IDP Store")
+        st.caption("Browse and launch all versions of Intelligent Document Processor")
+
+
+def render_hero_banner(latest_app: dict):
+    if not latest_app:
+        return
+
+    tags = get_app_tags(latest_app)
+    repo_url = f"https://github.com/{latest_app['repo']}" if latest_app.get("repo") else ""
+
+    st.markdown("### Featured")
+    with st.container(border=True):
+        left, right = st.columns([4, 1.3], gap="large")
+
+        with left:
+            st.markdown(f"## {latest_app.get('name', 'Latest Version')}")
+            for tag in tags:
+                render_chip(tag)
+            st.write(latest_app.get("description", ""))
+            st.caption(f"Repo: {latest_app.get('repo', '-')}")
+            st.caption(f"Branch: {latest_app.get('branch', '-')} | Entry: {latest_app.get('entry_file', '-')}")
+
+        with right:
+            if latest_app.get("streamlit_url"):
+                st.link_button("Open Latest", latest_app["streamlit_url"], use_container_width=True)
+            else:
+                st.button("Open Latest", disabled=True, use_container_width=True, key="open_latest_disabled")
+
+            if repo_url:
+                st.link_button("Open GitHub", repo_url, use_container_width=True)
+            else:
+                st.button("Open GitHub", disabled=True, use_container_width=True, key="open_latest_repo_disabled")
+
+
+def render_app_card(app: dict):
+    name = app.get("name", "Unknown App")
+    description = app.get("description", "No description provided.")
+    repo = app.get("repo", "-")
+    branch = app.get("branch", "-")
+    entry_file = app.get("entry_file", "-")
+    streamlit_url = app.get("streamlit_url", "")
+    tags = get_app_tags(app)
+    github_url = f"https://github.com/{repo}" if repo and repo != "-" else ""
+
+    with st.container(border=True):
+        st.markdown(f"### {name}")
+
+        if tags:
+            for tag in tags:
+                render_chip(tag)
+
+        st.write(description)
+        st.caption(f"Repo: {repo}")
+        st.caption(f"Branch: {branch} | Entry: {entry_file}")
+
+        b1, b2 = st.columns(2)
+        with b1:
+            if streamlit_url:
+                st.link_button("Open App", streamlit_url, use_container_width=True)
+            else:
+                st.button("Open App", disabled=True, use_container_width=True, key=f"open_{name}")
+
+        with b2:
+            if github_url:
+                st.link_button("GitHub", github_url, use_container_width=True)
+            else:
+                st.button("GitHub", disabled=True, use_container_width=True, key=f"repo_{name}")
+
+
+def main():
     st.markdown(
         """
         <style>
         .block-container {
-            padding-top: 2rem;
+            padding-top: 1.8rem;
             padding-bottom: 2rem;
-            max-width: 1200px;
+            max-width: 1300px;
         }
         </style>
         """,
         unsafe_allow_html=True,
     )
 
-    st.title("IDP Store")
-    st.caption("Browse and launch all versions of Intelligent Document Processor")
+    config = load_config()
+    apps = config.get("apps", [])
 
-    t1, t2, t3 = st.columns([2, 1, 1])
-    with t1:
-        search = st.text_input("Search apps", placeholder="Search by version, sprint, repo, or feature")
-    with t2:
-        st.metric("Total Apps", len(apps))
-    with t3:
-        latest_count = sum(1 for a in apps if "Latest" in a.get("tags", []))
-        st.metric("Latest Builds", latest_count)
+    render_header()
 
     if not apps:
         st.warning("No apps configured. Please update apps_config.json.")
         return
 
-    filtered = [app for app in apps if app_matches(app, search)]
+    latest_app = next((a for a in apps if has_tag(a, "Latest")), None)
+    render_hero_banner(latest_app)
+
+    st.markdown("---")
+
+    t1, t2, t3 = st.columns([2.2, 1, 1], gap="medium")
+    with t1:
+        search = st.text_input("Search apps", placeholder="Search by version, sprint, repo, or feature")
+    with t2:
+        st.metric("Total Apps", len(apps))
+    with t3:
+        stable_count = sum(1 for a in apps if has_tag(a, "Stable"))
+        st.metric("Stable Builds", stable_count)
+
+    st.markdown("### Filter")
+
+    filter_labels = ["All", "Stable", "Latest", "Manual", "Sprint"]
+    filter_cols = st.columns(len(filter_labels))
+    active_filter = st.session_state.get("store_filter", "All")
+
+    for i, label in enumerate(filter_labels):
+        with filter_cols[i]:
+            if st.button(label, use_container_width=True, key=f"filter_{label}"):
+                st.session_state["store_filter"] = label
+                active_filter = label
+
+    st.caption(f"Active Filter: {active_filter}")
+
+    filtered = [
+        app for app in apps
+        if app_matches_search(app, search) and app_matches_filter(app, active_filter)
+    ]
 
     if not filtered:
         st.info("No matching apps found.")
         return
 
-    cols = st.columns(2, gap="large")
+    st.markdown("### Available Versions")
+
+    cols = st.columns(3, gap="large")
     for i, app in enumerate(filtered):
-        with cols[i % 2]:
+        with cols[i % 3]:
             render_app_card(app)
 
 
