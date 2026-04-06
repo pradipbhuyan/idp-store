@@ -8,7 +8,7 @@
       "entry_file": "IDP.py",
       "description": "Non Agentic version of the Intelligent Document Processor with guided review flow.",
       "tags": ["Manual", "Legacy", "Stable"],
-      "logo": "https://raw.githubusercontent.com/pradipbhuyan/idpagentv3/main/IDP-Logo1.png"
+      "logo": "https://raw.githubusercontent.com/pradipbhuyan/idpagentv3/main/IDP-Logo1.png",
       "streamlit_url": "https://idp-app-v1.streamlit.app"
     },
     {
@@ -19,7 +19,7 @@
       "entry_file": "IDP.py",
       "description": "Base Intelligent Document Processor",
       "tag": "Base",
-      "logo": "https://raw.githubusercontent.com/pradipbhuyan/idpagentv1/main/IDP-Logo1.png"
+      "logo": "https://raw.githubusercontent.com/pradipbhuyan/idpagentv1/main/IDP-Logo1.png",
       "streamlit_url": "https://idpagent.streamlit.app"
     },
     {
@@ -30,7 +30,7 @@
       "entry_file": "IDP.py",
       "description": "OCR fallback and batch processing",
       "tag": "Sprint 2",
-      "logo": "https://raw.githubusercontent.com/pradipbhuyan/idpagentv2/main/IDP-Logo1.png"
+      "logo": "https://raw.githubusercontent.com/pradipbhuyan/idpagentv2/main/IDP-Logo1.png",
       "streamlit_url": "https://idpagentv2.streamlit.app"
     },
     {
@@ -41,7 +41,7 @@
       "entry_file": "IDP.py",
       "description": "Template manager, version history, duplicate detection",
       "tag": "Sprint 3",
-      "logo": "https://raw.githubusercontent.com/pradipbhuyan/idpagentv3/main/IDP-Logo1.png"
+      "logo": "https://raw.githubusercontent.com/pradipbhuyan/idpagentv3/main/IDP-Logo1.png",
       "streamlit_url": "https://idpagentv3.streamlit.app"
     },
     {
@@ -52,7 +52,7 @@
       "entry_file": "IDP.py",
       "description": "JD ranking and advanced batch workflow",
       "tag": "Latest",
-      "logo": "https://raw.githubusercontent.com/pradipbhuyan/idpagentv4/main/IDP-Logo1.png"
+      "logo": "https://raw.githubusercontent.com/pradipbhuyan/idpagentv4/main/IDP-Logo1.png",
       "streamlit_url": "https://idpagentv4.streamlit.app/"
     }
   ]
