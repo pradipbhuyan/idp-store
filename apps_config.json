@@ -49,8 +49,8 @@
       "description": "JD ranking and advanced batch workflow.",
       "tags": ["Sprint 4", "Stable"],
       "streamlit_url": "https://idpagentv4.streamlit.app"
-    }
-        {
+    },
+    {
       "id": "idp-v5",
       "name": "IDP v5",
       "repo": "pradipbhuyan/idpagentv5",
