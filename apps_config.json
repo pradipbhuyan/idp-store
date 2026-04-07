@@ -47,8 +47,18 @@
       "branch": "main",
       "entry_file": "IDP.py",
       "description": "JD ranking and advanced batch workflow.",
-      "tags": ["Sprint 4", "Latest"],
+      "tags": ["Sprint 4", "Stable"],
       "streamlit_url": "https://idpagentv4.streamlit.app"
+    }
+        {
+      "id": "idp-v5",
+      "name": "IDP v5",
+      "repo": "pradipbhuyan/idpagentv5",
+      "branch": "main",
+      "entry_file": "IDP.py",
+      "description": "JD ranking and advanced CV Assessment Report.",
+      "tags": ["Sprint 5", "Latest"],
+      "streamlit_url": "https://idpagentv5.streamlit.app"
     }
   ]
 }
