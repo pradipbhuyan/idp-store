@@ -7,7 +7,6 @@
       "branch": "main",
       "entry_file": "IDP.py",
       "description": "Non Agentic version of the Intelligent Document Processor with guided review flow.",
-      "tags": ["Manual", "Stable"],
       "streamlit_url": "https://idp-app-v1.streamlit.app"
     },
     {
@@ -17,7 +16,6 @@
       "branch": "main",
       "entry_file": "IDP.py",
       "description": "Base Intelligent Document Processor.",
-      "tags": ["Base", "Stable"],
       "streamlit_url": "https://idpagent.streamlit.app"
     },
     {
@@ -27,7 +25,6 @@
       "branch": "main",
       "entry_file": "IDP.py",
       "description": "OCR fallback and batch processing.",
-      "tags": ["Sprint 2", "Stable"],
       "streamlit_url": "https://idpagentv2.streamlit.app"
     },
     {
@@ -37,7 +34,6 @@
       "branch": "main",
       "entry_file": "IDP.py",
       "description": "Template manager, version history, and duplicate detection.",
-      "tags": ["Sprint 3", "Stable"],
       "streamlit_url": "https://idpagentv3.streamlit.app"
     },
     {
@@ -47,7 +43,6 @@
       "branch": "main",
       "entry_file": "IDP.py",
       "description": "JD ranking and advanced batch workflow.",
-      "tags": ["Sprint 4", "Stable"],
       "streamlit_url": "https://idpagentv4.streamlit.app"
     },
     {
@@ -57,7 +52,6 @@
       "branch": "main",
       "entry_file": "IDP.py",
       "description": "JD ranking and advanced CV Assessment Report.",
-      "tags": ["Sprint 5", "Latest"],
       "streamlit_url": "https://idpagentv5.streamlit.app"
     },
     {
@@ -67,7 +61,6 @@
       "branch": "main",
       "entry_file": "IDP.py",
       "description": "Advanced CV Assessment Report.",
-      "tags": ["Sprint 6", "Latest"],
       "streamlit_url": "https://cvagentv1.streamlit.app/"
     }
 
