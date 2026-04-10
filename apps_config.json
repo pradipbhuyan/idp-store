@@ -5,7 +5,9 @@
       "name": "Manual IDP",
       "entry_file": "IDP.py",
       "description": "Non Agentic version of the Intelligent Document Processor with guided review flow.",
-      "streamlit_url": "https://idp-app-v1.streamlit.app"
+      "streamlit_url": "https://idp-app-v1.streamlit.app",
+      "logo": "assets/apps/idp-logo.png",
+      "tags": ["Manual"]
     },
     {
       "id": "idp-v1",
@@ -14,7 +16,9 @@
       "branch": "main",
       "entry_file": "IDP.py",
       "description": "Base Intelligent Document Processor.",
-      "streamlit_url": "https://idpagent.streamlit.app"
+      "streamlit_url": "https://idpagent.streamlit.app",
+      "logo": "assets/apps/InvoiceProcessor.png",
+      "tags": ["Legacy"]
     },
     {
       "id": "idp-v2",
@@ -23,7 +27,9 @@
       "branch": "main",
       "entry_file": "IDP.py",
       "description": "OCR fallback and batch processing.",
-      "streamlit_url": "https://idpagentv2.streamlit.app"
+      "streamlit_url": "https://idpagentv2.streamlit.app",
+      "logo": "assets/apps/TDReader.png",
+      "tags": ["Sprint 2"]
     },
     {
       "id": "idp-v3",
@@ -32,7 +38,9 @@
       "branch": "main",
       "entry_file": "IDP.py",
       "description": "Template manager, version history, and duplicate detection.",
-      "streamlit_url": "https://idpagentv3.streamlit.app"
+      "streamlit_url": "https://idpagentv3.streamlit.app",
+      "logo": "assets/apps/idp-v3.png",
+      "tags": ["Sprint 3"]
     },
     {
       "id": "idp-v4",
@@ -41,7 +49,9 @@
       "branch": "main",
       "entry_file": "IDP.py",
       "description": "JD ranking and advanced batch workflow.",
-      "streamlit_url": "https://idpagentv4.streamlit.app"
+      "streamlit_url": "https://idpagentv4.streamlit.app",
+      "logo": "assets/apps/idp-v4.png",
+      "tags": ["Stable"]
     },
     {
       "id": "idp-v5",
@@ -50,7 +60,9 @@
       "branch": "main",
       "entry_file": "IDP.py",
       "description": "JD ranking and advanced CV Assessment Report.",
-      "streamlit_url": "https://idpagentv5.streamlit.app"
+      "streamlit_url": "https://idpagentv5.streamlit.app",
+      "logo": "assets/apps/idp-logo.png",
+      "tags": ["Latest"]
     },
     {
       "id": "cvp-v1",
@@ -59,8 +71,9 @@
       "branch": "main",
       "entry_file": "IDP.py",
       "description": "Advanced CV Assessment Report.",
-      "streamlit_url": "https://cvagentv1.streamlit.app/"
+      "streamlit_url": "https://cvagentv1.streamlit.app/",
+      "logo": "assets/apps/ResumeProcessor.png",
+      "tags": ["Production"]
     }
-
   ]
 }
