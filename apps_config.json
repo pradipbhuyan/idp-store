@@ -6,7 +6,7 @@
       "entry_file": "IDP.py",
       "description": "Non Agentic version of the Intelligent Document Processor with guided review flow.",
       "streamlit_url": "https://idp-app-v1.streamlit.app",
-      "logo": "assets/apps/idp-logo.png",
+      "logo": "assets/idp-logo.png",
       "tags": ["Manual"]
     },
     {
@@ -17,7 +17,7 @@
       "entry_file": "IDP.py",
       "description": "Base Intelligent Document Processor.",
       "streamlit_url": "https://idpagent.streamlit.app",
-      "logo": "assets/apps/InvoiceProcessor.png",
+      "logo": "assets/InvoiceProcessor.png",
       "tags": ["Legacy"]
     },
     {
@@ -28,7 +28,7 @@
       "entry_file": "IDP.py",
       "description": "OCR fallback and batch processing.",
       "streamlit_url": "https://idpagentv2.streamlit.app",
-      "logo": "assets/apps/TDReader.png",
+      "logo": "assets/TDReader.png",
       "tags": ["Sprint 2"]
     },
     {
@@ -61,7 +61,7 @@
       "entry_file": "IDP.py",
       "description": "JD ranking and advanced CV Assessment Report.",
       "streamlit_url": "https://idpagentv5.streamlit.app",
-      "logo": "assets/apps/idp-logo.png",
+      "logo": "assets/idp-logo.png",
       "tags": ["Latest"]
     },
     {
@@ -72,7 +72,7 @@
       "entry_file": "IDP.py",
       "description": "Advanced CV Assessment Report.",
       "streamlit_url": "https://cvagentv1.streamlit.app/",
-      "logo": "assets/apps/ResumeProcessor.png",
+      "logo": "assets/ResumeProcessor.png",
       "tags": ["Production"]
     }
   ]
