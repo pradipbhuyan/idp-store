@@ -12,7 +12,7 @@ LOGO_PATH = BASE_DIR / "assets" / "idp-logo.png"
 UI_SIZES = {
     "header_logo_width": 280,
     "card_logo_width": 250,
-    "card_logo_column_ratio": [1.35, 2.25],
+    "card_logo_column_ratio": [2, 3],
 }
 
 def get_logo_path(app: dict):
