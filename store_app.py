@@ -9,7 +9,14 @@ BASE_DIR = Path(__file__).parent
 CONFIG_PATH = BASE_DIR / "apps_config.json"
 LOGO_PATH = BASE_DIR / "assets" / "idp-logo.png"
 
+def get_logo_path(app: dict):
+    logo = app.get("logo", "")
+    if not logo:
+        return None
 
+    path = BASE_DIR / logo
+    return path if path.exists() else None
+    
 def load_config():
     if not CONFIG_PATH.exists():
         st.error(f"Missing config file: {CONFIG_PATH}")
@@ -128,12 +135,19 @@ def render_hero_banner(latest_app: dict):
 
     tags = get_app_tags(latest_app)
     repo_url = f"https://github.com/{latest_app['repo']}" if latest_app.get("repo") else ""
+    app_logo = get_logo_path(latest_app)
 
     st.markdown("### Featured")
     with st.container(border=True):
-        left, right = st.columns([4, 1.3], gap="large")
+        left, right = st.columns([1.1, 3.2], gap="large")
 
         with left:
+            if app_logo:
+                st.image(str(app_logo), width=140)
+            elif LOGO_PATH.exists():
+                st.image(str(LOGO_PATH), width=140)
+
+        with right:
             st.markdown(f"## {latest_app.get('name', 'Latest Version')}")
             for tag in tags:
                 render_chip(tag)
@@ -141,17 +155,18 @@ def render_hero_banner(latest_app: dict):
             st.caption(f"Repo: {latest_app.get('repo', '-')}")
             st.caption(f"Branch: {latest_app.get('branch', '-')} | Entry: {latest_app.get('entry_file', '-')}")
 
-        with right:
-            if latest_app.get("streamlit_url"):
-                st.link_button("Open Latest", latest_app["streamlit_url"], use_container_width=True)
-            else:
-                st.button("Open Latest", disabled=True, use_container_width=True, key="open_latest_disabled")
+            b1, b2 = st.columns(2)
+            with b1:
+                if latest_app.get("streamlit_url"):
+                    st.link_button("Open Latest", latest_app["streamlit_url"], use_container_width=True)
+                else:
+                    st.button("Open Latest", disabled=True, use_container_width=True, key="open_latest_disabled")
 
-            if repo_url:
-                st.link_button("Open GitHub", repo_url, use_container_width=True)
-            else:
-                st.button("Open GitHub", disabled=True, use_container_width=True, key="open_latest_repo_disabled")
-
+            with b2:
+                if repo_url:
+                    st.link_button("Open GitHub", repo_url, use_container_width=True)
+                else:
+                    st.button("Open GitHub", disabled=True, use_container_width=True, key="open_latest_repo_disabled")
 
 def render_app_card(app: dict):
     name = app.get("name", "Unknown App")
@@ -162,17 +177,27 @@ def render_app_card(app: dict):
     streamlit_url = app.get("streamlit_url", "")
     tags = get_app_tags(app)
     github_url = f"https://github.com/{repo}" if repo and repo != "-" else ""
+    app_logo = get_logo_path(app)
 
     with st.container(border=True):
-        st.markdown(f"### {name}")
+        c1, c2 = st.columns([1, 2.4], gap="medium")
 
-        if tags:
-            for tag in tags:
-                render_chip(tag)
+        with c1:
+            if app_logo:
+                st.image(str(app_logo), width=90)
+            elif LOGO_PATH.exists():
+                st.image(str(LOGO_PATH), width=90)
 
-        st.write(description)
-        st.caption(f"Repo: {repo}")
-        st.caption(f"Branch: {branch} | Entry: {entry_file}")
+        with c2:
+            st.markdown(f"### {name}")
+
+            if tags:
+                for tag in tags:
+                    render_chip(tag)
+
+            st.write(description)
+            st.caption(f"Repo: {repo}")
+            st.caption(f"Branch: {branch} | Entry: {entry_file}")
 
         b1, b2 = st.columns(2)
         with b1:
@@ -186,7 +211,6 @@ def render_app_card(app: dict):
                 st.link_button("GitHub", github_url, use_container_width=True)
             else:
                 st.button("GitHub", disabled=True, use_container_width=True, key=f"repo_{name}")
-
 
 def main():
     st.markdown(
