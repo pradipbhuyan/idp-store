@@ -9,6 +9,12 @@ BASE_DIR = Path(__file__).parent
 CONFIG_PATH = BASE_DIR / "apps_config.json"
 LOGO_PATH = BASE_DIR / "assets" / "idp-logo.png"
 
+UI_SIZES = {
+    "header_logo_width": 180,
+    "card_logo_width": 150,
+    "card_logo_column_ratio": [1.35, 2.25],
+}
+
 def get_logo_path(app: dict):
     logo = app.get("logo", "")
     if not logo:
@@ -122,51 +128,12 @@ def render_header():
 
     with c1:
         if LOGO_PATH.exists():
-            st.image(str(LOGO_PATH), width=120)
+            st.image(str(LOGO_PATH), width=UI_SIZES["header_logo_width"])
 
     with c2:
         st.title("IDP Store")
         st.caption("Browse and launch all versions of Intelligent Document Processor")
 
-
-def render_hero_banner(latest_app: dict):
-    if not latest_app:
-        return
-
-    tags = get_app_tags(latest_app)
-    repo_url = f"https://github.com/{latest_app['repo']}" if latest_app.get("repo") else ""
-    app_logo = get_logo_path(latest_app)
-
-    st.markdown("### Featured")
-    with st.container(border=True):
-        left, right = st.columns([1.1, 3.2], gap="large")
-
-        with left:
-            if app_logo:
-                st.image(str(app_logo), width=140)
-            elif LOGO_PATH.exists():
-                st.image(str(LOGO_PATH), width=140)
-
-        with right:
-            st.markdown(f"## {latest_app.get('name', 'Latest Version')}")
-            for tag in tags:
-                render_chip(tag)
-            st.write(latest_app.get("description", ""))
-            st.caption(f"Repo: {latest_app.get('repo', '-')}")
-            st.caption(f"Branch: {latest_app.get('branch', '-')} | Entry: {latest_app.get('entry_file', '-')}")
-
-            b1, b2 = st.columns(2)
-            with b1:
-                if latest_app.get("streamlit_url"):
-                    st.link_button("Open Latest", latest_app["streamlit_url"], use_container_width=True)
-                else:
-                    st.button("Open Latest", disabled=True, use_container_width=True, key="open_latest_disabled")
-
-            with b2:
-                if repo_url:
-                    st.link_button("Open GitHub", repo_url, use_container_width=True)
-                else:
-                    st.button("Open GitHub", disabled=True, use_container_width=True, key="open_latest_repo_disabled")
 
 def render_app_card(app: dict):
     name = app.get("name", "Unknown App")
@@ -180,13 +147,13 @@ def render_app_card(app: dict):
     app_logo = get_logo_path(app)
 
     with st.container(border=True):
-        c1, c2 = st.columns([1, 2.4], gap="medium")
+        c1, c2 = st.columns(UI_SIZES["card_logo_column_ratio"], gap="medium")
 
         with c1:
             if app_logo:
-                st.image(str(app_logo), width=90)
+                st.image(str(app_logo), width=UI_SIZES["card_logo_width"])
             elif LOGO_PATH.exists():
-                st.image(str(LOGO_PATH), width=90)
+                st.image(str(LOGO_PATH), width=UI_SIZES["card_logo_width"])
 
         with c2:
             st.markdown(f"### {name}")
@@ -198,6 +165,8 @@ def render_app_card(app: dict):
             st.write(description)
             st.caption(f"Repo: {repo}")
             st.caption(f"Branch: {branch} | Entry: {entry_file}")
+
+        st.markdown("")
 
         b1, b2 = st.columns(2)
         with b1:
@@ -211,6 +180,7 @@ def render_app_card(app: dict):
                 st.link_button("GitHub", github_url, use_container_width=True)
             else:
                 st.button("GitHub", disabled=True, use_container_width=True, key=f"repo_{name}")
+
 
 def main():
     st.markdown(
@@ -234,11 +204,6 @@ def main():
     if not apps:
         st.warning("No apps configured. Please update apps_config.json.")
         return
-
-    latest_app = next((a for a in apps if has_tag(a, "Latest")), None)
-    render_hero_banner(latest_app)
-
-    st.markdown("---")
 
     t1, t2, t3 = st.columns([2.2, 1, 1], gap="medium")
     with t1:
